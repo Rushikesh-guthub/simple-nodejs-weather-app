@@ -1,7 +1,7 @@
-# Stage 1: Build Stage
-FROM node:14 AS build
+# Use an official Node.js runtime as the base image
+FROM node:14
 
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the working directory
@@ -13,22 +13,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the application
-RUN npm run build
-
-# Stage 2: Production Stage
-FROM node:14-alpine AS production
-
-# Set the working directory
-WORKDIR /app
-
-# Copy the built application from the build stage
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package.json ./
-
-# Expose the port
+# Expose port 3000 (assuming your app listens on this port)
 EXPOSE 3000
 
 # Command to run the application
-CMD ["node", "dist/index.js"]
+CMD ["node", "index.js"]
