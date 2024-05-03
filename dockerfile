@@ -10,6 +10,11 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# Add the configuration for EJS rendering engine
+RUN mkdir views
+RUN echo "app.set('view engine','ejs');" > views/ejs-config.js
+RUN echo "app.engine('ejs', require('ejs').__express);" >> views/ejs-config.js
+
 # Copy the rest of the application code
 COPY . .
 
